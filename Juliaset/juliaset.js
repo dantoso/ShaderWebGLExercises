@@ -110,13 +110,13 @@ class JuliaSetShader extends ShaderProgram {
         this.powG = this.powsvec[1];
         this.powB = this.powsvec[2];
         let shaderObj = this;
-        menu.add(this, 'cx').onChange(
+        menu.add(this, 'cx', -2.0, 2.0, 0.01).onChange(
             function(value) {
                 shaderObj.CVec[0] = value;
                 requestAnimationFrame(shaderObj.render.bind(shaderObj));
             }
         );
-        menu.add(this, 'cy').onChange(
+        menu.add(this, 'cy', -2.0, 2.0, 0.01).onChange(
             function(value) {
                 shaderObj.CVec[1] = value;
                 requestAnimationFrame(shaderObj.render.bind(shaderObj));
