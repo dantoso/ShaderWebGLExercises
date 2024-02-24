@@ -97,7 +97,8 @@ class JuliaSetShader extends ShaderProgram {
      */
     setupMenu() {
         this.CVec = glMatrix.vec2.fromValues(-1, 0);
-        this.C = complexToStr(this.CVec);
+        this.cx = this.CVec[0];
+        this.cy = this.CVec[1];
         this.scale = 1;
         this.escape = 2.0;
         this.centervec = glMatrix.vec2.fromValues(0, 0);
@@ -109,9 +110,15 @@ class JuliaSetShader extends ShaderProgram {
         this.powG = this.powsvec[1];
         this.powB = this.powsvec[2];
         let shaderObj = this;
-        menu.add(this, 'C').listen().onChange(
+        menu.add(this, 'cx').onChange(
             function(value) {
-                shaderObj.CVec = splitComplexStr(value);
+                shaderObj.CVec[0] = value;
+                requestAnimationFrame(shaderObj.render.bind(shaderObj));
+            }
+        );
+        menu.add(this, 'cy').onChange(
+            function(value) {
+                shaderObj.CVec[1] = value;
                 requestAnimationFrame(shaderObj.render.bind(shaderObj));
             }
         );
