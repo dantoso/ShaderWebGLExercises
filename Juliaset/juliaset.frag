@@ -3,6 +3,8 @@ precision highp float;
 // The maximum number of iterations before escape should be
 // included here (You can change this)
 #define MAX_ITERS 100.0
+#define GREEN vec4(0.2, 1., 0.2, 1.);
+#define ORANGE = vec4(1., 0.6, 0., 1.);
 
 // Uniforms set from Javascript that are constant
 // over all fragments
@@ -20,8 +22,22 @@ varying vec2 v_position;
 
 vec4 greenToBlack(vec2 start, float escape) {
     vec2 z = start;
-    vec4 green = vec4(0.2, 1., 0.2, 1.);
-    vec4 color = green;
+    vec4 green = GREEN;
+    for(float i = 0.; i < MAX_ITERS; i++) {
+        z = vec2(z.x*z.x - z.y*z.y, 2.*z.x*z.y) + uC;
+
+        if(dot(z, z) > escape*escape) {
+            vec4 color = green*i/MAX_ITERS;
+            color.a = 1.;
+            return color;
+        }
+    }
+    return green;
+}
+
+vec4 greenToOrangeToGreen(vec2 start, float escape) {
+    vec2 z = start;
+    vec4 green = GREEN;
     for(float i = 0.; i < MAX_ITERS; i++) {
         z = vec2(z.x*z.x - z.y*z.y, 2.*z.x*z.y) + uC;
 
@@ -36,8 +52,6 @@ vec4 greenToBlack(vec2 start, float escape) {
 
 void main() {
     vec2 z = uScale*v_position - uCenter;
-    vec4 green = vec4(0.2, 1., 0.2, 1.);
-    vec4 orange = vec4(1., 0.6, 0., 1.);
 
     gl_FragColor = greenToBlack(z, uEscape);
 }
