@@ -18,19 +18,26 @@ uniform vec3 uPows; /* Final color will be R = uPows.x^(-count/MAX_ITERS)
 // barycentric coordinates from positions of triangle vertices
 varying vec2 v_position;
 
+vec4 greenToBlack(vec2 start, float escape) {
+    vec2 z = start;
+    vec4 green = vec4(0.2, 1., 0.2, 1.);
+    vec4 color = green;
+    for(float i = 0.; i < MAX_ITERS; i++) {
+        z = vec2(z.x*z.x - z.y*z.y, 2.*z.x*z.y) + uC;
+
+        if(dot(z, z) > escape*escape) {
+            vec4 color = green*i/MAX_ITERS;
+            color.a = 1.;
+            return color;
+        }
+    }
+    return green;
+}
+
 void main() {
     vec2 z = uScale*v_position - uCenter;
     vec4 green = vec4(0.2, 1., 0.2, 1.);
     vec4 orange = vec4(1., 0.6, 0., 1.);
 
-    for(float i = 0.; i < MAX_ITERS; i++) {
-        z = vec2(z.x*z.x - z.y*z.y, 2.*z.x*z.y) + uC;
-
-        if(dot(z, z) > uEscape*uEscape) {
-            gl_FragColor = green*i/MAX_ITERS;
-            gl_FragColor.a = 1.;
-            return;
-        }
-    }
-    gl_FragColor = green;
+    gl_FragColor = greenToBlack(z, uEscape);
 }
