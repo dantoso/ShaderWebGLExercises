@@ -122,7 +122,7 @@ class JuliaSetShader extends ShaderProgram {
                 requestAnimationFrame(shaderObj.render.bind(shaderObj));
             }
         );
-        menu.add(this, 'escape').onChange(this.render.bind(this));
+        menu.add(this, 'escape', -2.0, 2.0, 0.001).onChange(this.render.bind(this));
         menu.add(this, 'scale').onChange(this.render.bind(this)).listen();
         menu.add(this, 'center').listen().onChange(
             function(value) {
