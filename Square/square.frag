@@ -32,11 +32,17 @@ float calculateReflection(float rayComponent, float rayDirection) {
         return rayComponent;
     }
 
-    if(modulo4 == 1. || modulo4 == 2.) {
+    if(modulo4 == 1.) {
         return (1. - fraction)*sign(rayDirection);   
     }
+    if(modulo4 == 2.) {
+        return (-fraction)*sign(rayDirection);
+    }
+    if(modulo4 == 3.) {
+        return (-1. + fraction)*sign(rayDirection);
+    }
 
-    return (-1. + fraction)*sign(rayDirection);
+    return (fraction)*sign(rayDirection);
 }
 
 vec2 moveOrigin(float scalar, vec2 direction) {
@@ -50,8 +56,8 @@ vec2 moveOrigin(float scalar, vec2 direction) {
 }
 
 void main() {
-    vec2 direction = vec2(1.,0.);
-    vec2 offset = moveOrigin(0.2*uTime, direction);
+    vec2 direction = vec2(0.3, 0.6);
+    vec2 offset = moveOrigin(0.5*uTime, direction);
     
     gl_FragColor = drawSquare(uHalfSideLen, offset, v_position);
 }
