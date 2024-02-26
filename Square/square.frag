@@ -23,17 +23,35 @@ vec4 drawSquare(float halfSide, vec2 originOffset, vec2 position) {
     return vec4(0.0, 0.0, 0.0, 1.0);
 }
 
-void main() {
-    //TODO: Fill this in for module 8 exercise 1
-    float x = v_position.x;
-    float y = v_position.y;
+float calculateReflection(float rayComponent, float rayDirection) {
+    float integer = floor(abs(rayComponent));
+    float fraction = rayComponent - integer;
+    float modulo4 = mod(integer, 4.);
 
+    if(integer == 0.) {
+        return rayComponent;
+    }
+
+    if(modulo4 == 1. || modulo4 == 2.) {
+        return (1. - fraction)*sign(rayDirection);   
+    }
+
+    return (-1. + fraction)*sign(rayDirection);
+}
+
+vec2 moveOrigin(float scalar, vec2 direction) {
+    vec2 origin = vec2(0., 0.);
+    vec2 offset = scalar * direction;
+
+    origin.x = calculateReflection(offset.x, direction.x);
+    origin.y = calculateReflection(offset.y, direction.y);
+
+    return origin;
+}
+
+void main() {
     vec2 direction = vec2(1.,0.);
-    vec2 offset = 0.2*uTime * direction;
-    /* TODO: Change this to a square that moves towards
-     * the bottom right with time.  In particular, draw a pixel
-     * in red if |x-uTime/5| < uHalfSideLen and |y+uTime/5| < uHalfSideLen.
-     * Otherwise, draw it in black
-     */
+    vec2 offset = moveOrigin(0.2*uTime, direction);
+    
     gl_FragColor = drawSquare(uHalfSideLen, offset, v_position);
 }
