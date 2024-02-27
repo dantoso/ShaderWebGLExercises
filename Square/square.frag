@@ -33,16 +33,16 @@ float calculateReflection(float rayComponent, float rayDirection) {
     }
 
     if(modulo4 == 1.) {
-        return (1. - fraction)*sign(rayDirection);   
+        return (1. - fraction);   
     }
     if(modulo4 == 2.) {
-        return (-fraction)*sign(rayDirection);
+        return (-fraction);
     }
     if(modulo4 == 3.) {
-        return (-1. + fraction)*sign(rayDirection);
+        return (-1. + fraction);
     }
 
-    return (fraction)*sign(rayDirection);
+    return (fraction);
 }
 
 vec2 moveOrigin(float scalar, vec2 direction) {
